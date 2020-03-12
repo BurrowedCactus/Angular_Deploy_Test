@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy} from '@angular/core';
+import { Subscription } from 'rxjs';
+
 import { Post } from '../post.model';
 import { PostsService } from '../posts.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-post-list',
@@ -11,13 +12,19 @@ import { Subscription } from 'rxjs';
 
 export class PostListComponent implements OnInit, OnDestroy{
   posts: Post[] = [];
+  isLoading: Boolean = false;
   private postsSub : Subscription;
+
   constructor(private postsService:PostsService) { }
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.postsService.getPosts();
     this.postsSub = this.postsService.getPostsUpdateListerner()
-      .subscribe((posts)=>{this.posts=posts});
+    .subscribe((posts: Post[]) => {
+      this.posts = posts;
+      this.isLoading = false;
+    });
   }
 
   ngOnDestroy():void{
