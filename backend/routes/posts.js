@@ -29,12 +29,41 @@ router.put("/:id", (req, res, next) => {
 });
 
 router.get("", (req, res, next) => {
-  Post.find().then(documents => {
-    res.status(200).json({
-      message: "Posts fetched successfully!",
-      posts: documents
+  const pageSize = +req.query.pageSize;
+  const currentPage = +req.query.pageIndex;
+  const postQuery = Post.find();
+  let fetchedPosts;
+  if (pageSize && currentPage) {
+    postQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
+  }
+  postQuery
+    .then(documents => {
+      fetchedPosts = documents;
+      return Post.countDocuments();
+    })
+    .then(count => {
+      res.status(200).json({
+        message: "Posts fetched successfully!",
+        posts: fetchedPosts,
+        maxPosts: count
+      });
     });
-  });
+  /*
+  const pageSize = +req.query.pageSize;
+  const curentPage = +req.query.pageIndex;
+  const numPosts = Post.countDocuments();
+  if (pageSize && curentPage){
+    Post.find()
+      .skip(pageSize * (curentPage - 1))
+      .limit(pageSize)
+      .then(documents =>{
+        res.status(200).json({
+          message: "Posts fetched successfully!",
+          posts: documents,
+          maxPosts: numPosts
+        });
+      });
+  }*/
 });
 
 router.get("/:id", (req, res, next) => {
