@@ -14,8 +14,8 @@ mongoose.set('useUnifiedTopology', true);
 
 mongoose
   .connect(
-    "mongodb+srv://admin:yTxNZ2dydARYUj5@mongodbserver-bf1eh.mongodb.net/node-angular?retryWrites=true&w=majority")
-  .then(() =>{
+   "mongodb+srv://admin:yTxNZ2dydARYUj5@mongodbserver-bf1eh.mongodb.net/node-angular?retryWrites=true&w=majority")
+    .then(() =>{
     console.log('connected to database!');
   })
   .catch(()=>{

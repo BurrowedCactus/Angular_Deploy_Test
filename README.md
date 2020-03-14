@@ -3,6 +3,6 @@
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.3.
 
 ## Development server
-The project is hosted on Github Pages:
+The project is hosted on AWS:
 
-https://burrowedcactus.github.io/Angular_Deploy_Test/
+http://ijustwanttotestmybucket.s3-website-us-east-1.amazonaws.com/
