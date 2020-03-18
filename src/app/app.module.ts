@@ -11,12 +11,16 @@ import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PostCreateComponent } from './posts/posts-create/post-create.component';
 import { HeaderComponent } from './header/header.component';
 import { PostListComponent } from './posts/post-list/post-list.component';
+import { NavMenuComponent } from './nav-menu/nav-menu.component';
 
 
 
@@ -25,7 +29,8 @@ import { PostListComponent } from './posts/post-list/post-list.component';
     AppComponent,
     PostCreateComponent,
     PostListComponent,
-    HeaderComponent
+    HeaderComponent,
+    NavMenuComponent
   ],
   imports: [
     BrowserModule,
@@ -39,6 +44,9 @@ import { PostListComponent } from './posts/post-list/post-list.component';
     MatExpansionModule,
     MatProgressSpinnerModule,
     MatPaginatorModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatListModule,
     HttpClientModule
   ],
   providers: [],

@@ -1,0 +1,25 @@
+<div class="container">
+  <mat-toolbar color="primary" class="toolbar">
+    <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
+    <a class="toolbar" routerLink="/">MyMessages</a>
+    <span class="spacer"></span>
+    <ul class="top-right-buttons">
+      <li>
+        <a mat-button routerLink="/create" routerLinkActive="mat-accent">New Post</a>
+      </li>
+    </ul>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #snav class = "mat-sidenav">
+      <mat-nav-list class="list-horizontal">
+        <a mat-list-item routerLink="/create" routerLinkActive="mat-accent">New Post</a>
+        <a mat-list-item>Chat Room(To be implemented)</a>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
