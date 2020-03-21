@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
 import { PostsService } from '../posts.service';
+import { FilesService } from '../../files.service';
 import { Post } from "../post.model";
+import { validateHorizontalPosition } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-post-create',
@@ -15,15 +17,27 @@ export class PostCreateComponent implements OnInit {
   isLoading = false;
   private mode = "create";
   private postId: string;
+  form = new FormGroup({
+    firstName: new FormControl(''),
+    lastName: new FormControl(''),
+  });
 
   constructor(
     private postsService: PostsService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private fileUploadService: FilesService) {
   }
 
   ngOnInit(): void {
     this.isLoading = true;
+    this.form = new FormGroup({
+      'title': new FormControl(null,{
+        validators:[Validators.required, Validators.minLength(3)]},),
+      'content': new FormControl(null),
+      'file': new FormControl(null)
+      });
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
+/*
       if (paramMap.has("postId")) {
         this.mode = "edit";
         this.postId = paramMap.get("postId");
@@ -34,16 +48,24 @@ export class PostCreateComponent implements OnInit {
             title: postData.title,
             content: postData.content
           };
+          this.form.setValue({
+            'id':this.post.id,
+            'title':this.post.title,
+            'content':this.post.content,
+            'file':})
         });
       } else {
         this.mode = "create";
         this.postId = null;
       }
+      */
       this.isLoading = false;
     });
+
   }
 
-  onSavePost(form:NgForm){
+  onSubmit(){}
+    /*
     if(form.invalid){
       return;
     }
@@ -60,6 +82,5 @@ export class PostCreateComponent implements OnInit {
       );
     }
     form.resetForm();
-  }
-
+    */
 }

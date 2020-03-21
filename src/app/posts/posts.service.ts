@@ -1,25 +1,31 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { map } from 'rxjs/Operators';
+import { Injectable} from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Router } from "@angular/router";
+import { Subject, BehaviorSubject } from "rxjs";
+import { map } from "rxjs/Operators";
 
-import { Post } from './post.model';
+import { Post } from "./post.model";
 
-import { environment } from './../../environments/environment'
+import { environment } from "./../../environments/environment";
 
-
-
-const path = environment.apiUrl + 'posts/';
+const path = environment.apiUrl + "posts/";
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
-export class PostsService {
-  private posts:Post[]=[];
-  private postsUpdated = new Subject<{ posts: Post[]; postCount: number }>();
+export class PostsService{
+  private posts: Post[] = [];
+  private postsUpdated: BehaviorSubject<{
+    posts: Post[];
+    postCount: number;
+  }>= new BehaviorSubject({
+    posts: [],
+    postCount: 0
+  })
+  ;
 
-
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router) {
+    this.getPosts(5,1);
+  }
 
   getPosts(postsPerPage: number, currentPage: number) {
     const queryParams = `?pageSize=${postsPerPage}&pageIndex=${currentPage}`;
@@ -32,7 +38,7 @@ export class PostsService {
           posts: postData.posts.map(post => ({
             title: post.title,
             content: post.content,
-            id: post._id,
+            id: post._id
           })),
           maxPosts: postData.maxPosts
         }))
@@ -58,26 +64,21 @@ export class PostsService {
     }>(path + id);
   }
 
-  addPost(title: string, content: string) {
-    const post: Post = {id: null, title: title, content: content};
-    this.http
-      .post<{ message: string, postId: string }>(path, post)
-      .subscribe(responseData => {
-        this.router.navigate(["/"]);
-      });
+  addPost(title: string, content: string, user?: string) {
+    const post: Post = { title: title, content: content };
+    this.http.post(path, post).subscribe(responseData => {
+      this.router.navigate(["/"]);
+    });
   }
 
   updatePost(id: string, title: string, content: string) {
     const post: Post = { id: id, title: title, content: content };
-    this.http
-      .put(path + id, post)
-      .subscribe(response => {
-        this.router.navigate(["/"]);
-      });
+    this.http.put(path + id, post).subscribe(response => {
+      this.router.navigate(["/"]);
+    });
   }
 
   deletePost(postId: string) {
     return this.http.delete(path + postId);
   }
-
 }
