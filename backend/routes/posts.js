@@ -29,13 +29,17 @@ router.put("/:id", (req, res, next) => {
 });
 
 router.get("", (req, res, next) => {
+
   const pageSize = +req.query.pageSize;
   const currentPage = +req.query.pageIndex;
   const postQuery = Post.find();
   let fetchedPosts;
+  console.log(pageSize);
+  console.log(currentPage);
   if (pageSize && currentPage) {
     postQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
   }
+
   postQuery
     .then(documents => {
       fetchedPosts = documents;
@@ -47,8 +51,13 @@ router.get("", (req, res, next) => {
         posts: fetchedPosts,
         maxPosts: count
       });
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Fetching posts failed!"
+      });
     });
-  /*
+    /*
   const pageSize = +req.query.pageSize;
   const curentPage = +req.query.pageIndex;
   const numPosts = Post.countDocuments();

@@ -14,14 +14,10 @@ const path = environment.apiUrl + "posts/";
 })
 export class PostsService{
   private posts: Post[] = [];
-  private postsUpdated: BehaviorSubject<{
+  private postsUpdated = new Subject<{
     posts: Post[];
     postCount: number;
-  }>= new BehaviorSubject({
-    posts: [],
-    postCount: 0
-  })
-  ;
+  }>();
 
   constructor(private http: HttpClient, private router: Router) {
     this.getPosts(5,1);

@@ -21,6 +21,8 @@ import { PostCreateComponent } from './posts/posts-create/post-create.component'
 import { HeaderComponent } from './header/header.component';
 import { PostListComponent } from './posts/post-list/post-list.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 
 
@@ -48,7 +50,8 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
     MatSidenavModule,
     MatIconModule,
     MatListModule,
-    HttpClientModule
+    HttpClientModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]

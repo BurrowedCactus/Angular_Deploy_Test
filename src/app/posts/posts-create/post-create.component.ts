@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm, FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { NgForm, FormGroup, FormControl, Validators, ReactiveFormsModule, FormBuilder} from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
 import { PostsService } from '../posts.service';
@@ -17,27 +17,22 @@ export class PostCreateComponent implements OnInit {
   isLoading = false;
   private mode = "create";
   private postId: string;
-  form = new FormGroup({
-    firstName: new FormControl(''),
-    lastName: new FormControl(''),
+  form = this.fb.group({
+    title: ['',Validators.required],
+    content: [''],
+    file: ['']
   });
 
   constructor(
     private postsService: PostsService,
     private route: ActivatedRoute,
-    private fileUploadService: FilesService) {
+    private fileUploadService: FilesService,
+    private fb: FormBuilder) {
   }
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.form = new FormGroup({
-      'title': new FormControl(null,{
-        validators:[Validators.required, Validators.minLength(3)]},),
-      'content': new FormControl(null),
-      'file': new FormControl(null)
-      });
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
-/*
       if (paramMap.has("postId")) {
         this.mode = "edit";
         this.postId = paramMap.get("postId");
@@ -52,35 +47,31 @@ export class PostCreateComponent implements OnInit {
             'id':this.post.id,
             'title':this.post.title,
             'content':this.post.content,
-            'file':})
+            })
         });
       } else {
         this.mode = "create";
         this.postId = null;
       }
-      */
+
       this.isLoading = false;
     });
 
   }
 
-  onSubmit(){}
-    /*
-    if(form.invalid){
-      return;
-    }
+  onSubmit(){
     this.isLoading = true;
     if (this.mode === "create") {
       this.postsService.addPost(
-        form.value.title,
-        form.value.content);
+        this.form.value.title,
+        this.form.value.content);
     } else {
       this.postsService.updatePost(
         this.postId,
-        form.value.title,
-        form.value.content
+        this.form.value.title,
+        this.form.value.content
       );
     }
-    form.resetForm();
-    */
+    this.form.reset();
+  }
 }

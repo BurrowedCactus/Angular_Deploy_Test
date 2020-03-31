@@ -13,8 +13,8 @@
   <mat-sidenav-container class="sidenav-container">
     <mat-sidenav #snav class = "mat-sidenav">
       <mat-nav-list class="list-horizontal">
-        <a mat-list-item routerLink="/create" routerLinkActive="mat-accent">New Post</a>
-        <a mat-list-item>Chat Room(To be implemented)</a>
+        <a mat-list-item routerLink="/create" routerLinkActive="mat-accent" (click)="snav.toggle()">New Post</a>
+        <a mat-list-item (click)="snav.toggle()">Chat Room(To be implemented)</a>
       </mat-nav-list>
     </mat-sidenav>
 
