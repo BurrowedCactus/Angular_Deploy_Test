@@ -1,22 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm, FormGroup, FormControl, Validators, ReactiveFormsModule, FormBuilder} from '@angular/forms';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 
 import { PostsService } from '../posts.service';
 import { FilesService } from '../../files.service';
 import { Post } from "../post.model";
 import { validateHorizontalPosition } from '@angular/cdk/overlay';
+import { Observable } from 'rxjs';
+import { CanDeactivateInterface } from './can-deactivate.service';
 
 @Component({
   selector: 'app-post-create',
   templateUrl: './post-create.component.html',
   styleUrls: ['./post-create.component.css']
 })
-export class PostCreateComponent implements OnInit {
+export class PostCreateComponent implements OnInit , CanDeactivateInterface{
   post: Post;
   isLoading = false;
   private mode = "create";
   private postId: string;
+  private changesSaved: boolean = false;
   form = this.fb.group({
     id: [''],
     title: ['',Validators.required],
@@ -27,6 +30,7 @@ export class PostCreateComponent implements OnInit {
   constructor(
     private postsService: PostsService,
     private route: ActivatedRoute,
+    private router: Router,
     private fileUploadService: FilesService,
     private fb: FormBuilder) {
   }
@@ -57,6 +61,7 @@ export class PostCreateComponent implements OnInit {
         this.mode = "create";
         this.postId = null;
         this.isLoading = false;
+        this.post = {title: "",content: ""};
       }
     });
 
@@ -64,20 +69,35 @@ export class PostCreateComponent implements OnInit {
 
   onSubmit(){
     this.isLoading = true;
+    this.changesSaved = true;
+    let response$: Observable<any>;
     if (this.mode === "create") {
       let newPost: Post = {
         title: this.form.value.title,
         content: this.form.value.content
       }
-      this.postsService.addPost(newPost);
+      response$ = this.postsService.addPost(newPost);
     } else {
       let updatedPost: Post = {
         id: this.postId,
         title: this.form.value.title,
         content: this.form.value.content
       }
-      this.postsService.updatePost(updatedPost);
+      response$ = this.postsService.updatePost(updatedPost);
     }
+    response$.subscribe(responseData => {
+      this.router.navigate(["/"]);
+    });
     this.form.reset();
   }
+
+  canDeactivate(): boolean | Observable<boolean> | Promise<boolean>{
+    if (this.changesSaved){
+      return true;
+    } else if (this.post.title === this.form.value.title && this.post.content === this.form.value.content){
+      return true;
+    }
+    return confirm('Do you want to discard the changes?');
+  }
+
 }

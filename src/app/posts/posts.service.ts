@@ -1,7 +1,7 @@
 import { Injectable} from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { Subject, BehaviorSubject } from "rxjs";
+import { Subject, BehaviorSubject, Observable } from "rxjs";
 import { map } from "rxjs/Operators";
 
 import { Post } from "./post.model";
@@ -60,19 +60,15 @@ export class PostsService{
     }>(path + id);
   }
 
-  addPost(post) {
-    this.http.post(path, post).subscribe(responseData => {
-      this.router.navigate(["/"]);
-    });
+  addPost(post: Post): Observable<any> {
+    return this.http.post(path, post);
   }
 
-  updatePost(post: Post) {
+  updatePost(post: Post): Observable<any>  {
     if(!post.id){
       console.log("error, cannot update a post with no id. In posts service.");
     }
-    this.http.put(path + post.id, post).subscribe(response => {
-      this.router.navigate(["/"]);
-    });
+    return this.http.put(path + post.id, post);
   }
 
   deletePost(postId: string) {
