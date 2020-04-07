@@ -18,8 +18,9 @@ export class PostCreateComponent implements OnInit {
   private mode = "create";
   private postId: string;
   form = this.fb.group({
+    id: [''],
     title: ['',Validators.required],
-    content: [''],
+    content: ['',Validators.required],
     file: ['']
   });
 
@@ -30,6 +31,7 @@ export class PostCreateComponent implements OnInit {
     private fb: FormBuilder) {
   }
 
+
   ngOnInit(): void {
     this.isLoading = true;
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
@@ -37,7 +39,7 @@ export class PostCreateComponent implements OnInit {
         this.mode = "edit";
         this.postId = paramMap.get("postId");
         this.postsService.getPost(this.postId).subscribe(postData => {
-          this.isLoading = false;
+          console.log(postData);
           this.post = {
             id: postData._id,
             title: postData.title,
@@ -47,14 +49,15 @@ export class PostCreateComponent implements OnInit {
             'id':this.post.id,
             'title':this.post.title,
             'content':this.post.content,
+            'file':null
             })
+          this.isLoading = false;
         });
       } else {
         this.mode = "create";
         this.postId = null;
+        this.isLoading = false;
       }
-
-      this.isLoading = false;
     });
 
   }
@@ -62,15 +65,18 @@ export class PostCreateComponent implements OnInit {
   onSubmit(){
     this.isLoading = true;
     if (this.mode === "create") {
-      this.postsService.addPost(
-        this.form.value.title,
-        this.form.value.content);
+      let newPost: Post = {
+        title: this.form.value.title,
+        content: this.form.value.content
+      }
+      this.postsService.addPost(newPost);
     } else {
-      this.postsService.updatePost(
-        this.postId,
-        this.form.value.title,
-        this.form.value.content
-      );
+      let updatedPost: Post = {
+        id: this.postId,
+        title: this.form.value.title,
+        content: this.form.value.content
+      }
+      this.postsService.updatePost(updatedPost);
     }
     this.form.reset();
   }

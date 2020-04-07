@@ -20,14 +20,14 @@ export class PostsService{
   }>();
 
   constructor(private http: HttpClient, private router: Router) {
-    this.getPosts(5,1);
+    //this.getPosts();
   }
 
-  getPosts(postsPerPage: number, currentPage: number) {
-    const queryParams = `?pageSize=${postsPerPage}&pageIndex=${currentPage}`;
+  getPosts() {
+    //const queryParams = `?pageSize=${postsPerPage}&pageIndex=${currentPage}`;
     this.http
       .get<{ message: string; posts: any; maxPosts: number }>(
-        path + queryParams
+        path// + queryParams
       )
       .pipe(
         map(postData => ({
@@ -60,16 +60,17 @@ export class PostsService{
     }>(path + id);
   }
 
-  addPost(title: string, content: string, user?: string) {
-    const post: Post = { title: title, content: content };
+  addPost(post) {
     this.http.post(path, post).subscribe(responseData => {
       this.router.navigate(["/"]);
     });
   }
 
-  updatePost(id: string, title: string, content: string) {
-    const post: Post = { id: id, title: title, content: content };
-    this.http.put(path + id, post).subscribe(response => {
+  updatePost(post: Post) {
+    if(!post.id){
+      console.log("error, cannot update a post with no id. In posts service.");
+    }
+    this.http.put(path + post.id, post).subscribe(response => {
       this.router.navigate(["/"]);
     });
   }
