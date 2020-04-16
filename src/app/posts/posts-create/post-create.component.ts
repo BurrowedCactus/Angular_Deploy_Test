@@ -20,6 +20,7 @@ export class PostCreateComponent implements OnInit , CanDeactivateInterface{
   private mode = "create";
   private postId: string;
   private changesSaved: boolean = false;
+  files: any = [];
   form = this.fb.group({
     id: [''],
     title: ['',Validators.required],
@@ -67,6 +68,7 @@ export class PostCreateComponent implements OnInit , CanDeactivateInterface{
 
   }
 
+  //confirm add a post
   onSubmit(){
     this.isLoading = true;
     this.changesSaved = true;
@@ -91,13 +93,26 @@ export class PostCreateComponent implements OnInit , CanDeactivateInterface{
     this.form.reset();
   }
 
+  //router deactivate guard
   canDeactivate(): boolean | Observable<boolean> | Promise<boolean>{
     if (this.changesSaved){
       return true;
-    } else if (this.post.title === this.form.value.title && this.post.content === this.form.value.content){
+    } else if (this.post.title === this.form.value.title && this.post.content == this.form.value.content){
       return true;
     }
     return confirm('Do you want to discard the changes?');
   }
 
+  //file uploading
+  uploadFile(event) {
+    for (let index = 0; index < event.length; index++) {
+      const element = event[index];
+      this.files.push(element.name)
+    }
+  }
+
+  //remove uploaded file
+  deleteAttachment(index) {
+    this.files.splice(index, 1)
+  }
 }

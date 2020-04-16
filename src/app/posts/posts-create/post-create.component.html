@@ -21,6 +21,7 @@
       </textarea>
       <mat-error>error: please enter some post content.</mat-error>
     </mat-form-field>
+
     <button
       mat-raised-button
       color="accent"
@@ -29,5 +30,29 @@
     >
       Save Post
     </button>
+
+    <!--
+      <button
+      mat-raised-button
+      color="accent"
+      type="submit"
+      class="uploadfilecontainer"
+      appDragDrop
+      (onFileDropped)="uploadFile($event)"
+      (click)="fileInput.click()"
+    >
+      Upload a Picture
+    </button>
+    <input hidden type="file" #fileInput (change)="uploadFile($event.target.files)">
+    -->
   </form>
+  <div  class="files-list" *ngFor="let file of files;let i= index">
+      <p> {{ file }} </p>
+      <button class="delete-file" (click)="deleteAttachment(i)">
+        <img src="../../assets/Recycle_Bin_Full.png">
+      </button>
+   </div>
 </mat-card>
+
+
+

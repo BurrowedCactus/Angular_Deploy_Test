@@ -23,6 +23,7 @@ import { PostListComponent } from './posts/post-list/post-list.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { DragAndDropDirective } from './posts/posts-create/drag-and-drop.directive';
 
 
 
@@ -32,7 +33,8 @@ import { environment } from '../environments/environment';
     PostCreateComponent,
     PostListComponent,
     HeaderComponent,
-    NavMenuComponent
+    NavMenuComponent,
+    DragAndDropDirective
   ],
   imports: [
     BrowserModule,
